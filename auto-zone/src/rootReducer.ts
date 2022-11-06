@@ -1,14 +1,14 @@
 import { combineReducers } from "redux";
-// import moduleReducer, {
-//   initialState as moduleState,
-// } from "./pages/states/reducer";
+import moduleReducer, {
+  initialState as moduleState,
+} from "./pages/states/reducer";
 
 const rootReducer = combineReducers({
-  // module: moduleReducer,
+  module: moduleReducer,
 });
 
 export const initialState: AppState = {
-  // module: moduleState,
+  module: moduleState,
 };
 
 export type AppState = ReturnType<typeof rootReducer>;
