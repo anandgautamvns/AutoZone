@@ -5,30 +5,42 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   requestMakerListPending,
   requestModelListPending,
-  requestYearListPending,
 } from "./states/action";
 import {
+  defaultEngineData,
   defaultMakerData,
   defaultModelData,
   defaultYearData,
   yearList,
 } from "./states/constant";
 import {
+  selectEngineListData,
+  selectEngineListLoading,
   selectMakerListData,
   selectMakerListLoading,
   selectModelListData,
   selectModelListLoading,
 } from "./states/selector";
-import { MakerEntity, ModelEntity, YearEntity } from "./states/type";
+import {
+  EngineEntity,
+  MakerEntity,
+  ModelEntity,
+  YearEntity,
+} from "./states/type";
 import { MakerRequest, ModelRequest } from "../APIService/request";
 
 const Content: React.FC = () => {
   const dispatch = useDispatch();
+  // selector-start
   const makerList = useSelector(selectMakerListData);
   const makerLoading = useSelector(selectMakerListLoading);
   const modelList = useSelector(selectModelListData);
   const modelLoading = useSelector(selectModelListLoading);
+  const engineList = useSelector(selectEngineListData);
+  const engineLoading = useSelector(selectEngineListLoading);
+  // selector-end
 
+  // local-state-start
   const [selectedYear, setSelectedYear] = useState<string | null | undefined>(
     null
   );
@@ -46,9 +58,12 @@ const Content: React.FC = () => {
   const [selectedModelItem, setSelectedModelItem] =
     useState<ModelEntity | null>(defaultModelData ?? null);
 
-  useEffect(() => {
-    dispatch<any>(requestYearListPending());
-  }, []);
+  const [selectedEngineId, setSelectedEngineId] = useState<
+    number | null | undefined
+  >(null);
+  const [selectedEngineItem, setSelectedEngineItem] =
+    useState<EngineEntity | null>(defaultEngineData ?? null);
+  // local-state-end
 
   useEffect(() => {
     if (!isNil(selectedYear) && !isEmpty(selectedYear)) {
@@ -87,6 +102,9 @@ const Content: React.FC = () => {
 
     setSelectedModelId(null);
     setSelectedModelItem(null);
+
+    setSelectedEngineId(null);
+    setSelectedEngineItem(null);
   };
 
   const handleMakerChange = (value: number) => {
@@ -100,6 +118,9 @@ const Content: React.FC = () => {
     }
     setSelectedModelId(null);
     setSelectedModelItem(null);
+
+    setSelectedEngineId(null);
+    setSelectedEngineItem(null);
   };
 
   const handleModelChange = (value: number) => {
@@ -109,6 +130,18 @@ const Content: React.FC = () => {
         modelList.Results.filter(
           (item: ModelEntity) => item.Model_ID === value
         )[0] ?? null
+      );
+    }
+    setSelectedEngineId(null);
+    setSelectedEngineItem(null);
+  };
+
+  const handleEngineChange = (value: number) => {
+    setSelectedEngineId(value);
+    if (!isNil(value)) {
+      setSelectedEngineItem(
+        engineList.filter((item: EngineEntity) => item.engineId === value)[0] ??
+          null
       );
     }
   };
@@ -166,7 +199,7 @@ const Content: React.FC = () => {
                       makerList.Results.length === 0) ||
                     isNil(selectedYearItem)
                   }
-                  loading={makerLoading}
+                  // loading={makerLoading}
                 />
               </div>
             </Col>
@@ -195,36 +228,30 @@ const Content: React.FC = () => {
                       modelList.Results.length === 0) ||
                     isNil(selectedMakerItem)
                   }
-                  loading={modelLoading}
+                  // loading={modelLoading}
                 />
               </div>
             </Col>
             <Col span={5}>
-            <div className="select-block">
+              <div className="select-block">
                 <Select
                   listItemHeight={10}
                   listHeight={250}
                   placeholder="4 | Engine"
                   style={{ width: "100%" }}
-                  options={
-                    modelList &&
-                    modelList.Results &&
-                    modelList.Results.map(
-                      (data: ModelEntity, index: number) => ({
-                        value: data.Model_ID,
-                        label: data.Model_Name,
-                      })
-                    )
-                  }
-                  onChange={handleModelChange}
-                  value={selectedModelId}
+                  options={engineList.map(
+                    (data: EngineEntity, index: number) => ({
+                      value: data.engineId,
+                      label: data.engine,
+                    })
+                  )}
+                  onChange={handleEngineChange}
+                  value={selectedEngineId}
                   disabled={
-                    (modelList &&
-                      modelList.Results &&
-                      modelList.Results.length === 0) ||
-                    isNil(selectedMakerItem)
+                    (engineList && engineList.length === 0) ||
+                    isNil(selectedModelItem)
                   }
-                  loading={modelLoading}
+                  // loading={engineLoading}
                 />
               </div>
             </Col>

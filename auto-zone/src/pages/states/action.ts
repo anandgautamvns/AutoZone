@@ -1,5 +1,6 @@
-import { MakerRequest, ModelRequest } from "../../APIService/request";
+import { EngineRequest, MakerRequest, ModelRequest } from "../../APIService/request";
 import {
+  EngineResponse,
   MakerResponse,
   ModelResponse,
   YearResponse,
@@ -24,6 +25,12 @@ import {
   REQUEST_MODEL_LIST_FAILURE,
   REQUEST_MODEL_LIST_PENDING,
   REQUEST_MODEL_LIST_SUCCESS,
+  RequestEngineListFailure,
+  RequestEngineListPending,
+  RequestEngineListSuccess,
+  REQUEST_ENGINE_LIST_FAILURE,
+  REQUEST_ENGINE_LIST_PENDING,
+  REQUEST_ENGINE_LIST_SUCCESS,
 } from "./type";
 
 export const requestYearListPending = (): Promise<RequestYearListPending> =>
@@ -74,17 +81,35 @@ export const requestModelListPending = (
     type: REQUEST_MODEL_LIST_PENDING,
     payload,
   });
-
 export const requestModelListSuccess = (
   payload: ModelResponse
 ): RequestModelListSuccess => ({
   type: REQUEST_MODEL_LIST_SUCCESS,
   payload,
 });
-
 export const requestModelListFailure = (
   error: APIError | null
 ): RequestModelListFailure => ({
   type: REQUEST_MODEL_LIST_FAILURE,
+  payload: error,
+});
+
+export const requestEngineListPending = (
+  payload: EngineRequest
+): Promise<RequestEngineListPending> =>
+  Promise.resolve({
+    type: REQUEST_ENGINE_LIST_PENDING,
+    payload,
+  });
+export const requestEngineListSuccess = (
+  payload: EngineResponse
+): RequestEngineListSuccess => ({
+  type: REQUEST_ENGINE_LIST_SUCCESS,
+  payload,
+});
+export const requestEngineListFailure = (
+  error: APIError | null
+): RequestEngineListFailure => ({
+  type: REQUEST_ENGINE_LIST_FAILURE,
   payload: error,
 });

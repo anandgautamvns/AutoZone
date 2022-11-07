@@ -30,3 +30,12 @@ export const selectModelListLoading = createSelector(
   selectModuleState,
   (item: ModuleState) => item.modelList.loading
 );
+
+export const selectEngineListData = createSelector(
+  selectModuleState,
+  (item: ModuleState) => item.engineList.data
+);
+export const selectEngineListLoading = createSelector(
+  selectModuleState,
+  (item: ModuleState) => item.engineList.loading
+);

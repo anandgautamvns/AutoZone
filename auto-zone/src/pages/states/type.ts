@@ -1,6 +1,7 @@
 import { Action } from "redux";
-import { MakerRequest, ModelRequest } from "../../APIService/request";
+import { EngineRequest, MakerRequest, ModelRequest } from "../../APIService/request";
 import {
+  EngineResponse,
   MakerResponse,
   ModelResponse,
   YearResponse,
@@ -59,6 +60,19 @@ export type RequestModelListFailure = ReduxAction<
   typeof REQUEST_MODEL_LIST_FAILURE
 >;
 
+export type RequestEngineListPending = ReduxAction<
+  EngineRequest,
+  typeof REQUEST_ENGINE_LIST_PENDING
+>;
+export type RequestEngineListSuccess = ReduxAction<
+  EngineResponse,
+  typeof REQUEST_ENGINE_LIST_SUCCESS
+>;
+export type RequestEngineListFailure = ReduxAction<
+  APIError | null,
+  typeof REQUEST_ENGINE_LIST_FAILURE
+>;
+
 export type ModuleAction =
   | RequestYearListPending
   | RequestYearListSuccess
@@ -68,7 +82,10 @@ export type ModuleAction =
   | RequestMakerListFailure
   | RequestModelListPending
   | RequestModelListSuccess
-  | RequestModelListFailure;
+  | RequestModelListFailure
+  | RequestEngineListPending
+  | RequestEngineListSuccess
+  | RequestEngineListFailure;
 
 export type ModuleState = {
   yearList: {
@@ -83,6 +100,11 @@ export type ModuleState = {
   };
   modelList: {
     data: ModelResponse;
+    loading: boolean;
+    error: APIError | null;
+  };
+  engineList: {
+    data: EngineResponse;
     loading: boolean;
     error: APIError | null;
   };
@@ -108,7 +130,7 @@ export interface ModelEntity {
 }
 
 export interface EngineEntity {
-  count: string;
+  count: number;
   engine: string;
-  engineId: string;
+  engineId: number;
 }

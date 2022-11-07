@@ -1,14 +1,20 @@
 import { ModuleReducerMap } from "../../type";
 import { combineModuleReducers } from "../../utils";
+import { defaultData } from "./constant";
 import {
   ModuleAction,
   ModuleState,
+  RequestEngineListFailure,
+  RequestEngineListSuccess,
   RequestMakerListFailure,
   RequestMakerListSuccess,
   RequestModelListFailure,
   RequestModelListSuccess,
   RequestYearListFailure,
   RequestYearListSuccess,
+  REQUEST_ENGINE_LIST_FAILURE,
+  REQUEST_ENGINE_LIST_PENDING,
+  REQUEST_ENGINE_LIST_SUCCESS,
   REQUEST_MAKER_LIST_FAILURE,
   REQUEST_MAKER_LIST_PENDING,
   REQUEST_MAKER_LIST_SUCCESS,
@@ -27,22 +33,17 @@ export const initialState: ModuleState = {
     error: null,
   },
   makerList: {
-    data: {
-      Count: 0,
-      Message: "",
-      SearchCriteria: "",
-      Results: [],
-    },
+    data: defaultData,
     loading: false,
     error: null,
   },
   modelList: {
-    data: {
-      Count: 0,
-      Message: "",
-      SearchCriteria: "",
-      Results: [],
-    },
+    data: defaultData,
+    loading: false,
+    error: null,
+  },
+  engineList: {
+    data: [],
     loading: false,
     error: null,
   },
@@ -112,6 +113,28 @@ const moduleReducer: ModuleReducerMap<ModuleState, ModuleAction> = {
     return {
       ...state,
       modelList: { ...state.modelList, loading: false, error },
+    };
+  },
+
+  [REQUEST_ENGINE_LIST_PENDING](state) {
+    return { ...state, engineList: { ...state.engineList, loading: true } };
+  },
+  [REQUEST_ENGINE_LIST_SUCCESS](state, action) {
+    const dataList = (action as RequestEngineListSuccess).payload;
+    return {
+      ...state,
+      engineList: {
+        ...state.engineList,
+        data: dataList,
+        loading: false,
+      },
+    };
+  },
+  [REQUEST_ENGINE_LIST_FAILURE](state, action) {
+    const error = (action as RequestEngineListFailure).payload;
+    return {
+      ...state,
+      engineList: { ...state.engineList, loading: false, error },
     };
   },
 };

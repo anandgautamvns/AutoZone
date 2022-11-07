@@ -15,4 +15,4 @@ export interface PageableResponse<T> {
 export type YearResponse = YearEntity[];
 export type MakerResponse = PageableResponse<MakerEntity>;
 export type ModelResponse = PageableResponse<ModelEntity>;
-export type EngineResponse = PageableResponse<EngineEntity>;
+export type EngineResponse = EngineEntity[];

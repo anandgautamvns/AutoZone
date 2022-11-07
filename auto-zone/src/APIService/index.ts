@@ -1,5 +1,5 @@
 import Axios from "axios";
-import { MakerRequest, ModelRequest } from "./request";
+import { EngineRequest, MakerRequest, ModelRequest } from "./request";
 
 const ROOT_URL = "https://vpic.nhtsa.dot.gov/api";
 const format = "json";
@@ -9,7 +9,7 @@ export const getYears = async () => {
   try {
     let response;
     response = await Axios.get(
-      `${ROOT_URL}/vehicles/GetModelsForMakeYear/make/honda/modelyear/2015`,
+      `${ROOT_URL}`,
       {
         params: { format: format },
       }
@@ -44,8 +44,23 @@ export const getModels = async (request: ModelRequest) => {
   return response?.data;
 };
 
+export const getEngines = async (request: EngineRequest) => {
+  let response;
+  try {
+    let response;
+    response = await Axios.get(
+      `${ROOT_URL}`,
+      {
+        params: { format: format },
+      }
+    );
+  } catch (err) {}
+  return response;
+};
+
 export const APIService = {
   getYears,
   getMakers,
   getModels,
+  getEngines
 };
